@@ -1,6 +1,6 @@
 Secrets v2
 
-Just another simplified Whisper-like web app clone in Node (using Express), Mongoose and Passport.js with OAuth 2.0 strategies for Facebook & Google authentication.
+Just another simplified Whisper-like web app written in Node (using Express), Mongoose and using Passport.js with OAuth 2.0 strategies for Facebook & Google authentication.
 
 Allows a user to post their secret without revealing their identity.
 
