@@ -1,7 +1,17 @@
-Secrets v2
+## Secrets v2
 
-Just another simplified Whisper-like web app written in Node using Express, Mongoose and Passport.js with OAuth 2.0 strategies for Facebook & Google authentication.
+A minimalist Whisper-like web app project that explores OAuth 2.0 authentication using Facebook and Google.
 
-Allows a user to post their secret without revealing their identity.
+A project from Udemy The Complete 2020 Web Development Bootcamp by Dr. Angela Yu.
 
-Based on a challenge project from Angela Yu's Udemy The Complete 2020 Web Development Bootcamp
+## What does it do?
+
+Allows a user to post a 'secret' message that can be viewed by other authenticated users without revealing the author's identity.
+
+## Built With
+
+* [Node.js] (https://nodejs.org/en/) - application server
+* [Express] (https://expressjs.com/) - minimalist framework for Node.js
+* [MongoDB] (https://www.mongodb.com/) - database
+* [Mongoose] (https://mongoosejs.com/) - MongoDB object-modelling for Node.js
+* [Passport.js] (http://www.passportjs.org/) - authentication for Node.js

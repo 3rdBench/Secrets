@@ -1,36 +1,38 @@
 //jshint esversion:6
 
-// Environment Variables
+// Set environment Variables
 require('dotenv').config();
 
+// Set back-end modules
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 
-// Passport.js & related modules
+// Set Passport.js & related modules
 const session = require('express-session');
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 
-// Google OAuth 2.0 Strategy
+// Set Google OAuth 2.0 Strategy
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-// Facebook OAuth Strategy
-const FacebookStrategy = require('passport-facebook');
+// Set Facebook OAuth Strategy
+const FacebookStrategy = require('passport-facebook').Strategy;
 
-// Mongoose findOrCreate() method
+// Set Mongoose findOrCreate() method
 const findOrCreate = require('mongoose-findorcreate');
 
+// Set Express
 const app = express();
 
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 
-// Setup & configure session options
+// Configure session options
 app.use(session({
-  secret: "Our little secret.",
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: false
 }));
@@ -83,13 +85,13 @@ passport.deserializeUser(function(id, done) {
 
 // Setup passport for Google OAuth 2.0 Strategy
 passport.use(new GoogleStrategy({
-    clientID: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
+    clientID: process.env.GOOGLE_CLIENT_ID,
+    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     callbackURL: "http://localhost:3000/auth/google/secrets",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
-    console.log(profile);
+    // console.log(profile);
     User.findOrCreate({ googleId: profile.id }, function (err, user) {
       return cb(err, user);
     });
@@ -98,24 +100,27 @@ passport.use(new GoogleStrategy({
 
 // Setup passport for Facebook OAuth 2.0 Strategy
 passport.use(new FacebookStrategy({
-    clientID: process.env.APP_ID,
-    clientSecret: process.env.APP_SECRET,
+    clientID: process.env.FACEBOOK_APP_ID,
+    clientSecret: process.env.FACEBOOK_APP_SECRET,
     callbackURL: "http://localhost:3000/auth/facebook/secrets"
   },
   function(accessToken, refreshToken, profile, cb) {
-    console.log(profile);
+    // console.log(profile);
     User.findOrCreate({ facebookId: profile.id }, function (err, user) {
       return cb(err, user);
     });
   }
 ));
 
-// Get route to render the home page
+
+// === GET Routes ===
+
+// Route to Home page
 app.get("/", function(req, res){
   res.render("home");
 });
 
-// Get route to render Google's login page
+// Route to Google login page
 app.get("/auth/google", passport.authenticate('google', {scope: ["profile"]}));
 
 // Get route to locally authenticate user after successful Google OAuth authentication
@@ -126,29 +131,29 @@ app.get("/auth/google/secrets",
     res.redirect("/secrets");
   });
 
-// Get route to render Facebook's login page
+// Route to Facebook login page
 app.get("/auth/facebook", passport.authenticate('facebook'));
 
-// Get route to locally authenticate user after successful Facebook OAuth authentication
+// Locally authenticate user after successfully authenticated by Facebook's OAuth authentication
 app.get('/auth/facebook/secrets',
   passport.authenticate('facebook', { failureRedirect: "/login" }),
   function(req, res) {
-    // Successful authentication, redirect to secrets page
+    // Redirect to Secrets page
     res.redirect("/secrets");
 });
 
 
-// Get route to render the login page
+// Route to Login page
 app.get("/login", function(req, res){
   res.render("login");
 });
 
-// Get route to render the registration page
+// Route to Registration page
 app.get("/register", function(req, res){
   res.render("register");
 });
 
-// Get route to render the secrets page
+// Route to Secrets page
 app.get("/secrets", function(req, res){
   // Check database for users with secret field
   User.find({"secret": {$ne: null}}, function(err, foundUsers){
@@ -162,7 +167,7 @@ app.get("/secrets", function(req, res){
   });
 });
 
-// Get route to render the submit page
+// Route to Submit authenticated user's secret
 app.get("/submit", function(req, res){
   if (req.isAuthenticated()) {
     res.render("submit");
@@ -172,14 +177,17 @@ app.get("/submit", function(req, res){
 
 });
 
-// Get route to terminate active login session & cookie then redirect back to home page
+// Route to Logout authenticated user from web app
 app.get("/logout", function(req,res){
   req.logout();
   res.redirect("/");
 });
 
 
-// Post route to register a new account
+
+// === POST Routes ===
+
+// Route to Register a new account using email
 app.post("/register", function(req, res){
   User.register({username: req.body.username}, req.body.password, function(err, user){
     if (err){
@@ -194,7 +202,7 @@ app.post("/register", function(req, res){
   });
 });
 
-// Post route to login a user
+// Route to the Login page
 app.post("/login", function(req, res){
   const user = new User({
     username: req.body.username,
@@ -214,7 +222,7 @@ app.post("/login", function(req, res){
   });
 });
 
-// Post route to save the submitted secret
+// Route to save authenticated user's secret for storage
 app.post("/submit", function(req,res){
   const submittedSecret = req.body.secret;
   console.log(req.user.id);
@@ -234,6 +242,14 @@ app.post("/submit", function(req,res){
   });
 });
 
-app.listen(3000, function(){
-  console.log("Server started on port 3000.");
+
+// Set TCP port the app will listen to
+let tcpPort = process.env.PORT;
+
+if (tcpPort == null || tcpPort == ""){
+  tcpPort = 3000;
+}
+
+app.listen(tcpPort, function() {
+  console.log("Server started successfully on port: " + tcpPort);
 });
