@@ -2,9 +2,9 @@
 
 A minimalist Whisper-like web app project that explores OAuth 2.0 authentication using Facebook and Google.
 
-A project from Udemy The Complete 2020 Web Development Bootcamp by Dr. Angela Yu.
+A challenge project from Udemy The Complete 2020 Web Development Bootcamp by Dr. Angela Yu; successfully implemented Facebook authentication.
 
-## What does it do?
+### What does it do?
 
 Allows a user to post a 'secret' message that can be viewed by other authenticated users without revealing the author's identity.
 
