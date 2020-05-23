@@ -51,7 +51,7 @@ mongoose.set('useUnifiedTopology', true);
 let databaseName = "userDB";
 
 // Connect to MongoDB database for local development
-// mongoose.connect("mongodb://localhost:27017/" + databaseName);
+mongoose.connect("mongodb://localhost:27017/" + databaseName);
 
 // Connect to MongoDB Atlas database for deployment in Heroku
 mongoose.connect(
@@ -95,7 +95,7 @@ passport.deserializeUser(function(id, done) {
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "https://whispering-brushlands-13731.herokuapp.com/auth/google/secrets",
+    callbackURL: "http://localhost:3000/auth/google/secrets",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   function(accessToken, refreshToken, profile, cb) {
@@ -149,6 +149,7 @@ app.get('/auth/facebook/secrets',
     // Redirect to Secrets page
     res.redirect("/secrets");
 });
+
 
 // Route to Login page
 app.get("/login", function(req, res){
@@ -250,7 +251,7 @@ app.post("/submit", function(req,res){
 });
 
 
-// Set TCP port the app will listen to (local dev & deployment ready)
+// Set TCP port the app will listen to
 let tcpPort = process.env.PORT;
 
 if (tcpPort == null || tcpPort == ""){
