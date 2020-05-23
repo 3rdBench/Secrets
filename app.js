@@ -134,7 +134,7 @@ app.get("/", function(req, res){
 // Route to Google login page
 app.get("/auth/google", passport.authenticate('google', {scope: ["profile"]}));
 
-// Get route to locally authenticate user after successful Google OAuth authentication
+// Route after successful Google OAuth authentication
 app.get("/auth/google/secrets",
   passport.authenticate('google', { failureRedirect: "/login" }),
   function(req, res) {
@@ -145,7 +145,7 @@ app.get("/auth/google/secrets",
 // Route to Facebook login page
 app.get("/auth/facebook", passport.authenticate('facebook'));
 
-// Locally authenticate user after successfully authenticated by Facebook's OAuth authentication
+// Router after successful Facebook's OAuth authentication
 app.get('/auth/facebook/secrets',
   passport.authenticate('facebook', { failureRedirect: "/login" }),
   function(req, res) {
