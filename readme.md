@@ -1,8 +1,8 @@
 ## Secrets v2
 
-A minimalist Whisper-like project that explores OAuth 2.0 authentication using Google as well as Facebook (challenge part).
+A minimalist Whisper-like web app that explores OAuth 2.0 authentication using Google & Facebook (latter is the challenge part).
 
-From Udemy "The Complete 2020 Web Development Bootcamp" by Dr. Angela Yu; successfully implemented Facebook authentication.
+Taken from Udemy's "The Complete 2020 Web Development Bootcamp" by Dr. Angela Yu.
 
 ### What does it do?
 
@@ -15,3 +15,7 @@ Allows a registered user (email, Facebook or Google) to post a "secret" message 
 * [MongoDB] (https://www.mongodb.com/) - NoSQL database
 * [Mongoose] (https://mongoosejs.com/) - MongoDB object-modelling for Node.js
 * [Passport.js] (http://www.passportjs.org/) - authentication for Node.js
+
+## Heroku Deployment
+
+https://whispering-brushlands-13731.herokuapp.com/

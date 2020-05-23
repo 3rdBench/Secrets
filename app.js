@@ -51,7 +51,7 @@ mongoose.set('useUnifiedTopology', true);
 let databaseName = "userDB";
 
 // Connect to MongoDB database for local development
-mongoose.connect("mongodb://localhost:27017/" + databaseName);
+// mongoose.connect("mongodb://localhost:27017/" + databaseName);
 
 // Connect to MongoDB Atlas database for deployment in Heroku
 mongoose.connect(
@@ -59,6 +59,8 @@ mongoose.connect(
 );
 
 // Schema for user account
+// NOTE: 'username' field prevents the implicit creation of username_1 index in MongoDB Atlas which triggers
+//        an Internal Server Error (HTTP Status 500) when authenticating using Facebook
 const userSchema = new mongoose.Schema({
   email: String,
   password: String,
