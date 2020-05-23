@@ -64,7 +64,8 @@ const userSchema = new mongoose.Schema({
   password: String,
   googleId: String,
   facebookId: String,
-  secret: String
+  secret: String,
+  username: { type: String, index:false}
 });
 
 // Setup schema .plugin() to use passport-local-mongoose in salting & hashing user password
