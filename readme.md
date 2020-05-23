@@ -1,4 +1,4 @@
-## Secrets v2
+## Secrets
 
 A minimalist Whisper-like web app that explores OAuth 2.0 authentication using Google & Facebook (latter is the challenge part).
 
