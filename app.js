@@ -1,29 +1,29 @@
 //jshint esversion:6
 
-// Set environment Variables
+// Setup environment Variables
 require('dotenv').config();
 
-// Set back-end modules
+// Setup back-end modules
 const express = require("express");
 const bodyParser = require("body-parser");
 const ejs = require("ejs");
 const mongoose = require("mongoose");
 
-// Set Passport.js & related modules
+// Setup Passport.js & related modules
 const session = require('express-session');
 const passport = require("passport");
 const passportLocalMongoose = require("passport-local-mongoose");
 
-// Set Google OAuth 2.0 Strategy
+// Setup Google OAuth 2.0 Strategy
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 
-// Set Facebook OAuth Strategy
+// Setup Facebook OAuth Strategy
 const FacebookStrategy = require('passport-facebook').Strategy;
 
-// Set Mongoose findOrCreate() method
+// Setup Mongoose findOrCreate() method
 const findOrCreate = require('mongoose-findorcreate');
 
-// Set Express
+// Setup Express
 const app = express();
 
 app.use(express.static("public"));
@@ -47,8 +47,16 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useUnifiedTopology', true);
 
-// Connect to local MongoDB database
-mongoose.connect("mongodb://localhost:27017/userDB");
+// Setup MongoDB database name
+let databaseName = "userDB";
+
+// Connect to MongoDB database for local development
+// mongoose.connect("mongodb://localhost:27017/" + databaseName);
+
+// Connect to MongoDB Atlas database for deployment in Heroku
+mongoose.connect(
+  "mongodb+srv://" + process.env.MONGODB_USER_ACCT + ":" + process.env.MONGODB_USER_PSWD +"@cluster0-fxsru.mongodb.net/"  + databaseName
+);
 
 // Schema for user account
 const userSchema = new mongoose.Schema({
@@ -141,7 +149,6 @@ app.get('/auth/facebook/secrets',
     // Redirect to Secrets page
     res.redirect("/secrets");
 });
-
 
 // Route to Login page
 app.get("/login", function(req, res){
@@ -243,7 +250,7 @@ app.post("/submit", function(req,res){
 });
 
 
-// Set TCP port the app will listen to
+// Set TCP port the app will listen to (local dev & deployment ready)
 let tcpPort = process.env.PORT;
 
 if (tcpPort == null || tcpPort == ""){
